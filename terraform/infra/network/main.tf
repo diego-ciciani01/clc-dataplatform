@@ -1,7 +1,6 @@
 ################################################################################
 # VPC
 ################################################################################
-
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.0.0"
@@ -21,3 +20,4 @@ module "vpc" {
 
   create_database_subnet_group = var.vpc_create_database_subnet_group
 }
+
