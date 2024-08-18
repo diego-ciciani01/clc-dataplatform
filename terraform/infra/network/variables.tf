@@ -16,7 +16,7 @@ variable "project" {
 variable "organization" {
   description = "Name of the organization"
   type        = string
-  default     = "sapienza"
+  default     = "Sapienza"
 }
 
 variable "environment" {
@@ -35,6 +35,7 @@ variable "assume_role_arn" {
 ################################################################################
 variable "vpc_cidr" {
   description = "The CIDR block for the VPC."
+  type        = string
 }
 
 variable "vpc_private_subnets" {
@@ -64,10 +65,10 @@ variable "vpc_single_nat_gateway" {
   default     = false
 }
 
-variable "vpc_create_database_subnet_group" {
-  description = "Controls if database subnet group should be created (n.b. database_subnets must also be set"
+variable "vpc_create_reshift_subnet_group" {
+  description = "Controls if redshit subnet group should be created (n.b. database_subnets must also be set"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "vpc_enable_dns_hostnames" {
