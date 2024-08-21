@@ -55,3 +55,12 @@ variable "iam_role_arn" {
   type        = string
   default     = "arn:aws:iam::994304508204:role/EMR_DefaultRole"
 }
+
+################################################################################
+# VPC
+################################################################################
+
+variable "vpc_cidr" {
+  description = "The CIDR block for the VPC."
+  type        = string
+}
