@@ -3,6 +3,7 @@ from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from awsglue.context import GlueContext
+from pyspark.sql.functions import col
 from awsglue.job import Job
 import logging
 from pyspark.sql import SparkSession
@@ -19,8 +20,8 @@ job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
 # Specifica il database e la tabella dal Glue Data Catalog
-database_name = "clc-dataplatform-database-catalogs-dev"
-table_name = "clc-dataplatform-table-catalogs-dev"
+database_name = "test"
+table_name = "test-cloudcomputingclc_dataplatform_datalake_bronze_dev"
 output_data = "s3://clc-dataplatform-datalake-silver-dev/"
 
 
@@ -44,13 +45,18 @@ logging.info("Reading song data completed.")
 
 songs_table = song_df.select("songid", "title", "artistid", "year", "duration").dropDuplicates()
 
-# Scrivi la tabella delle canzoni su S3 in formato Parquet, partizionata per anno e artista
+songs_table_with_partition_cols = songs_table \
+.withColumn("partition_year", col("year")) \
+.withColumn("partition_artistid", col("artistid"))
+
 logging.info("Writing songs table ...")
-songs_table.write.mode('overwrite').partitionBy("year", "artistid").parquet(os.path.join(output_data, 'songs'))
+# write songs table to parquet files partitioned by year and artist
+songs_table_with_partition_cols.write.mode('overwrite').partitionBy("year", "artistid").parquet(os.path.join(output_data, 'songs'))
 logging.info("Writing songs table completed.")
 
 # Estrai le colonne per creare la tabella degli artisti
-artists_table = song_df.selectExpr("artistid", "artistname as name", 
+artists_table = song_df.selectExpr("artistid", 
+                                   "artistname as name", 
                                    "artistlocation as location", 
                                    "artistlatitude as latitude", 
                                    "artistlongitude as longitude").dropDuplicates()
@@ -92,7 +98,8 @@ songplays_table = song_df \
         "album.albumname as album_name"
     ).dropDuplicates()
 
-# write songplays table to parquet files partitioned by year and month
-songplays_table.write.parquet(os.path.join(output_data, "songplays"), mode='overwrite', partitionBy=["year"])
-
+songplays_table_with_partition_cols = songplays_table \
+.withColumn("partition_year", col("year"))
+# write songplays table to parquet files partitioned by year
+songplays_table_with_partition_cols.write.parquet(os.path.join(output_data, "songplays"), mode='overwrite', partitionBy=["year"])
 job.commit()
