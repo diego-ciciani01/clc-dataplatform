@@ -27,7 +27,7 @@ variable "environment" {
 variable "lab_role" {
   type        = string
   description = "The ARN of Role to assume during AWS authentication"
-  default     = "arn:aws:iam::994304508204:role/LabRole"
+  default     = "arn:aws:iam::359090434390:role/LabRole"
 }
 
 ################################################################################

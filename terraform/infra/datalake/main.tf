@@ -81,7 +81,7 @@ data "aws_iam_policy_document" "bucket_bronze_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::994304508204:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
   }
 }
@@ -110,7 +110,7 @@ data "aws_iam_policy_document" "bucket_silver_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::994304508204:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
   }
 }

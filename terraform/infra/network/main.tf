@@ -11,13 +11,13 @@ module "vpc" {
   azs              = data.aws_availability_zones.current.names
   private_subnets  = var.vpc_private_subnets
   public_subnets   = var.vpc_public_subnets
-  database_subnets = var.vpc_database_subnets  
+  database_subnets = var.vpc_database_subnets
 
   enable_dns_hostnames = var.vpc_enable_dns_hostnames
   enable_nat_gateway   = var.vpc_enable_nat_gateway
   single_nat_gateway   = var.vpc_single_nat_gateway
 
   create_redshift_subnet_group = var.vpc_create_reshift_subnet_group
-  
+
 }
 

@@ -3,6 +3,7 @@
 # Glue table 
 # Glue database
 # crowler
+# S3
 ################################################################################
 
 ################################################################################
@@ -40,14 +41,74 @@ resource "aws_glue_crawler" "crawler" {
 }
 
 ################################################################################
+# S3 bucket 
+# for host code
+# uppload code 
+################################################################################
+module "host_code" {
+  source = "terraform-aws-modules/s3-bucket/aws"
+
+  bucket = "${var.project}-glue-code-${var.environment}"
+
+  versioning = {
+    enabled = false
+  }
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+}
+
+data "aws_iam_policy_document" "bucket_host_code_policy" {
+
+  statement {
+    sid    = "allowGetAndPut"
+    effect = "Allow"
+
+    actions = ["s3:PutObject",
+      "s3:GetObject",
+    "s3:ListBucket"]
+
+    resources = [
+      "arn:aws:s3:::${var.project}-glue-code-${var.environment}",
+      "arn:aws:s3:::${var.project}-glue-code-${var.environment}/*"
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "glue_code_policy_bronze" {
+  bucket = module.host_code.s3_bucket_id
+  policy = data.aws_iam_policy_document.bucket_host_code_policy.json
+}
+
+#  upload the scrit on the bucket s3
+resource "aws_s3_bucket_object" "etl_code" {
+  bucket = "${var.project}-glue-code-${var.environment}"
+  key    = "etl.py"
+  source = "resources/etl.py"
+}
+
+
+################################################################################
 # Glue job
 ################################################################################
 
 resource "aws_glue_job" "my_python_glue_job" {
-  name     = "${var.project}-etl-${var.environment}"
-  role_arn = var.lab_role
+  name         = "${var.project}-etl-${var.environment}"
+  role_arn     = var.lab_role
+  glue_version = "4.0"
 
   command {
-    script_location = "s3://aws-glue-assets-994304508204-us-east-1/scripts/etl.py"
+    python_version  = "3.9"
+    script_location = "s3://${var.project}-glue-code-${var.environment}/etl.py"
   }
 }

@@ -20,9 +20,9 @@ job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
 # Specifica il database e la tabella dal Glue Data Catalog
-database_name = "test"
-table_name = "test-cloudcomputingclc_dataplatform_datalake_bronze_dev"
-output_data = "s3://clc-dataplatform-datalake-silver-dev/"
+database_name = "clc-dataplatform-database-catalogs-prod"
+table_name = "clc_dataplatform_datalake_bronze_prod"
+output_data = "s3://clc-dataplatform-datalake-silver-prod/"
 
 
 
