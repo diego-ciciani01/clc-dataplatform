@@ -8,3 +8,6 @@
 # tfstate.lock
 .terraform.lock.hcl
 .terraform.tfstate.lock.info
+
+#mac book
+.DS_Store

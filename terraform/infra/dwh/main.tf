@@ -17,28 +17,17 @@ module "redshift" {
   create_random_password = false
   master_password        = "Cloudcomputing2024!"
 
-  encrypted = false
-  iam_role_arns = ["arn:aws:iam::994304508204:role/LabRole", "arn:aws:iam::994304508204:role/myRedshiftRole","arn:aws:iam::994304508204:role/aws-service-role/redshift.amazonaws.com/AWSServiceRoleForRedshift","arn:aws:iam::994304508204:role/EMR_Notebooks_DefaultRole"]
+  encrypted     = false
+  iam_role_arns = ["arn:aws:iam::359090434390:role/LabRole", "arn:aws:iam::359090434390:role/myRedshiftRole", "arn:aws:iam::359090434390:role/aws-service-role/redshift.amazonaws.com/AWSServiceRoleForRedshift", "arn:aws:iam::359090434390:role/EMR_Notebooks_DefaultRole"]
 
   enhanced_vpc_routing   = false
-  subnet_ids             = ["subnet-05ff5991bdf4fe5a0"]
+  subnet_ids             = ["subnet-0d1541bbd448fd42e"]
   vpc_security_group_ids = [module.dwh_sg.security_group_id]
-  subnet_group_name = "dwh-subnet-group"
+  subnet_group_name      = "dwh-subnet-group"
 
   availability_zone_relocation_enabled = false
 
-#   logging = {
-#     enable        = true
-#     bucket_name   = "clc-dataplatform-emr-logs-dev"
-#     s3_key_prefix = "redshift/"
-#   }
-  
-  
-    
-#   create_endpoint_access          = true
-#   endpoint_name                   = "dwh-endpoing"
-#   endpoint_subnet_group_name      = "dwh-subnet-group"
-#   endpoint_vpc_security_group_ids = ["${module.dwh_sg.security_group_arn}"]
+
 }
 
 
@@ -52,7 +41,7 @@ module "dwh_sg" {
 
   name        = "${var.project}-dwh-${var.environment}-sg"
   description = "Security Group for tableau"
-  vpc_id = "vpc-048dbe45304895ff2"
+  vpc_id      = "vpc-0928c23a1009a2529"
   computed_ingress_with_cidr_blocks = [
     {
       description = "Allow connections 80 vpc"
