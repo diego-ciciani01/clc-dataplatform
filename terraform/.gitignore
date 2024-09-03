@@ -10,6 +10,4 @@
 .terraform.tfstate.lock.info
 
 #mac book
-.DS_Store
-../.DS_Store
-../../.DS_Store
+*.DS_Store
