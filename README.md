@@ -1,6 +1,6 @@
 # Cloud Computing Project 
 
-### Master’s degree in Data Science at Sapienza University of Rome 2023/2024
+### Master’s degree in Data Science at Sapienza University of Rome, a.a 2023/2024
 
 This project shows the development of a scalable and efficient **data platform** using AWS cloud services.
 The platform is designed to manage, process, and analyze large datasets.
